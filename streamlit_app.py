@@ -163,7 +163,7 @@ commission = round(ca_mensuel * commission_portage, 2)
 capital = round(ca_mensuel - commission, 2)
 max_salaire = capital * 0.68
 # === Entrée utilisateur ===
-frais_reels_mensuel = st.number_input("Frais réels mensuels (€)", value=300.0)
+frais_reels_mensuel = st.number_input("Frais réels mensuels (€)", value=200.0)
 km_par_mois = st.number_input("Distance domicile-client (km/mois)", value=100)
 cv_fiscaux = st.selectbox("Nombre de chevaux fiscaux", options=[3, 4, 5, 6, 7], index=4)
 euro_to_gbp = st.number_input("Taux de conversion EUR -> GBP", value=default_rate, format="%.4f")
@@ -275,7 +275,7 @@ st.write({
     "Impot prélevé à la source (€)": f"{impot_source} €",
     "Net imposable (€)": f"{net_imposable} €",
     "Salaire net d'impôt (€)": f"{salaire_net} €",
-    "ARE mensuelle estimée après 18 mois de cotisations ": f"{are_mensuelle:.2f} €",
+    "ARE mensuelle estimée": f"{are_mensuelle:.2f} €",
     "Frais kilométriques (€)": f"{frais_km} €",
     "Frais réels (€)": f"{frais_reels_mensuel} €",
     "Total des frais réels (€)": f"{frais_total} €",
