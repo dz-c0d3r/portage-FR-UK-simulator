@@ -237,26 +237,43 @@ revenu_net_total = round(salaire_net_apres_impot + frais_total + benefice_net_me
 cotisation_uk_mensuelle = round(NI_class2_mensuel + NI_class4_6_mensuel + NI_class4_2_mensuel, 2)
 impot_uk_mensuel = round(impot_IR_20_mensuel + impot_IR_40_mensuel, 2)
 
-# === Estimation Retraite ===
-# Estimation cotisation retraite
-# Retraite de base sur tranche 1
+# === Estimation Retraite (avec Tranche 1 + Tranche 2) ===
+
+# Limites 2024
+plafond_ss_mensuel = 3864.0  # Tranche 1
+plafond_tranche2 = 32592.0   # Tranche 2 max mensuel
+
+# Tranches
+tranche1 = min(salaire_brut, plafond_ss_mensuel)
+tranche2 = max(0, min(salaire_brut, plafond_tranche2) - plafond_ss_mensuel)
+
+# Retraite de base (uniquement Tranche 1)
 taux_base_salarial = 0.069
 taux_base_employeur = 0.0855
 
-# Retraite complémentaire Agirc-Arrco tranche 1
-taux_compl_salarial = 0.0787
-taux_compl_employeur = 0.1295
+# Retraite complémentaire Agirc-Arrco
+taux_compl_salarial_t1 = 0.0787
+taux_compl_employeur_t1 = 0.1295
 
-# Tranche 1 limitée à 3864€/mois
-tranche1 = min(salaire_brut, 3864)
+taux_compl_salarial_t2 = 0.021
+taux_compl_employeur_t2 = 0.014
 
+# Calculs Tranche 1
 ret_base_salarial = round(tranche1 * taux_base_salarial, 2)
 ret_base_employeur = round(tranche1 * taux_base_employeur, 2)
 
-ret_compl_salarial = round(tranche1 * taux_compl_salarial, 2)
-ret_compl_employeur = round(tranche1 * taux_compl_employeur, 2)
+ret_compl_salarial_t1 = round(tranche1 * taux_compl_salarial_t1, 2)
+ret_compl_employeur_t1 = round(tranche1 * taux_compl_employeur_t1, 2)
 
-total_retraite = round(ret_base_salarial + ret_base_employeur + ret_compl_salarial + ret_compl_employeur, 2)
+# Calculs Tranche 2 (pas de retraite de base)
+ret_compl_salarial_t2 = round(tranche2 * taux_compl_salarial_t2, 2)
+ret_compl_employeur_t2 = round(tranche2 * taux_compl_employeur_t2, 2)
+
+# Total mensuel
+total_retraite = round(
+    ret_base_salarial + ret_base_employeur +
+    ret_compl_salarial_t1 + ret_compl_employeur_t1 +
+    ret_compl_salarial_t2 + ret_compl_employeur_t2, 2)
 
 # === Affichage ===
 
@@ -299,10 +316,12 @@ st.write({
 
 st.subheader("🧓 Estimation Cotisation Retraite (mensuelle)")
 st.write({
-    "Retraite de base (salarié)": f"{ret_base_salarial} €",
-    "Retraite de base (employeur)": f"{ret_base_employeur} €",
-    "Complémentaire Agirc-Arrco (salarié)": f"{ret_compl_salarial} €",
-    "Complémentaire Agirc-Arrco (employeur)": f"{ret_compl_employeur} €",
+    "Retraite de base (Tranche 1 - salarié)": f"{ret_base_salarial} €",
+    "Retraite de base (Tranche 1 - employeur)": f"{ret_base_employeur} €",
+    "Complémentaire (T1 - salarié)": f"{ret_compl_salarial_t1} €",
+    "Complémentaire (T1 - employeur)": f"{ret_compl_employeur_t1} €",
+    "Complémentaire (T2 - salarié)": f"{ret_compl_salarial_t2} €",
+    "Complémentaire (T2 - employeur)": f"{ret_compl_employeur_t2} €",
     "Total cotisations retraite": f"{total_retraite} €"
 })
 
