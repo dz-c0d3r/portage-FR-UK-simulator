@@ -153,8 +153,8 @@ commission_portage = 0.06
 st.title("💼 Simulateur de Revenu - Portage UK pour Freelance")
 
 # === Entrée utilisateur ===
-TJM = st.number_input("TJM (€)", value=500)
-jours_travailles = st.number_input("Jours travaillés / mois", value=20)
+TJM = st.number_input("TJM (€)", min_value=100, max_value=5000, value=500)
+jours_travailles = st.number_input("Jours travaillés / mois", min_value=1, max_value=23, value=20)
 
 
 # === pré-calcule ===
@@ -163,8 +163,8 @@ commission = round(ca_mensuel * commission_portage, 2)
 capital = round(ca_mensuel - commission, 2)
 max_salaire = capital * 0.68
 # === Entrée utilisateur ===
-frais_reels_mensuel = st.number_input("Frais réels mensuels (€)", value=200.0)
-km_par_mois = st.number_input("Distance domicile-client (km/mois)", value=100)
+frais_reels_mensuel = st.number_input("Frais réels mensuels (€)", min_value=0.0, max_value=2000.0, value=200.0)
+km_par_mois = st.number_input("Distance domicile-client (km/mois)", min_value=0, max_value=2500, value=100)
 cv_fiscaux = st.selectbox("Nombre de chevaux fiscaux", options=[3, 4, 5, 6, 7], index=4)
 euro_to_gbp = st.number_input("Taux de conversion EUR -> GBP", value=default_rate, format="%.4f")
 # === Infos du simulateur URSSAF ===
