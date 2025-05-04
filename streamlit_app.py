@@ -121,6 +121,28 @@ def get_euro_to_gbp_rate():
     except Exception as e:
         st.warning(f"⚠️ Erreur lors de la récupération du taux EUR -> GBP : {e}")
     return 0.8500  # fallback par défaut
+
+def get_euro_to_gbp_rate_wise():
+    token = 'OGNhN2FlMjUtOTNjNS00MmFlLThhYjQtMzlkZTFlOTQzZDEwOjliN2UzNmZkLWRjYjgtNDEwZS1hYzc3LTQ5NGRmYmEyZGJjZA=='
+    try:
+        headers = {
+            "Authorization": f"Basic {token}",
+            "Accept": "application/json",
+        }
+        url = "https://api.wise.com/v1/rates?source=EUR&target=GBP"
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list) and len(data) > 0:
+                return round(data[0].get("rate", 0.85), 4)
+            else:
+                st.warning("⚠️ Réponse inattendue de Wise. Utilisation de la valeur par défaut.")
+        else:
+            st.warning(f"⚠️ Échec de la requête Wise : {response.status_code}")
+    except Exception as e:
+        st.warning(f"⚠️ Erreur lors de la récupération du taux Wise : {e}")
+    return 0.8500  # valeur de secours
+
 def calcul_are_mensuelle(salaire_brut_total: float, jours_travailles: int) -> float:
     """
     Calcule l'ARE mensuelle à partir du salaire brut total perçu sur la période de référence
@@ -146,7 +168,9 @@ def calcul_are_mensuelle(salaire_brut_total: float, jours_travailles: int) -> fl
     return round(are_journaliere * 30, 2)
 
 # Taux de conversion avec possibilité de le modifier manuellement
-default_rate = get_euro_to_gbp_rate()
+#default_rate = get_euro_to_gbp_rate()
+default_rate = get_euro_to_gbp_rate_wise()
+
 commission_portage = 0.06
 
 # === Titre ===
