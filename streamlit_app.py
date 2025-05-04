@@ -271,7 +271,7 @@ st.write({
     "Coût de salaire (€)": f"{cout_employeur} €",
     "Cotisation patronale (€)": f"{cotisation_patronale} €",
     "Cotisation salariale (€)": f"{cotisation_salariale} €",
-    "Taux neutre (%)": f"{taux_neutre} €",
+    "Taux neutre (%)": f"{taux_neutre} %",
     "Impot prélevé à la source (€)": f"{impot_source} €",
     "Net imposable (€)": f"{net_imposable} €",
     "Salaire net d'impôt (€)": f"{salaire_net} €",
